@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="cs" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fortis.audit – Forenzní audity a nezávislé prověřování</title>
+<meta name="description" content="Forenzní audity a nezávislé prověřování pro vlastníky, vedení společností a dozorčí orgány. Součást skupiny fortis.group.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; max-width: 100vw; overflow-x: hidden; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #101767;
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* ── LAYOUT ─────────────────────────────────────── */
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.container-wide { width: 100%; max-width: 1500px; margin: 0 auto; padding: 0 24px; }
+
+/* ── LANG SWITCH ─────────────────────────────────── */
+.lang-switch { display: flex; align-items: center; gap: 2px; margin-left: 10px; }
+.lang-btn {
+  background: none;
+  border: none;
+  font-size: .74rem;
+  font-weight: 700;
+  color: #a9acc3;
+  cursor: pointer;
+  padding: 3px 6px;
+  font-family: inherit;
+  letter-spacing: .07em;
+  border-radius: 4px;
+  transition: color .15s;
+  line-height: 1;
+}
+.lang-btn.active { color: #101767; }
+.lang-btn:hover { color: #101767; }
+.lang-sep { color: #d0d2e0; font-size: .7rem; }
+
+/* ── HEADER ──────────────────────────────────────── */
+#site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 40;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+}
+.nav-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.nav-logo-mark {
+  height: 32px;
+  display: flex;
+  align-items: center;
+}
+.nav-logo-mark svg { height: 32px; width: auto; }
+.nav-logo-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #101767;
+  letter-spacing: -.02em;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: .95rem;
+  font-weight: 500;
+  color: #101767;
+  text-decoration: none;
+  transition: opacity .2s;
+}
+.nav-links a:hover { opacity: .6; }
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-shrink: 0;
+}
+.btn-green {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 28px;
+  background: #31b36f;
+  color: #fff;
+  font-size: .95rem;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: background .2s;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+.btn-green:hover { background: #2ca363; }
+
+/* Mobile toggle */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+}
+.nav-toggle span {
+  display: block;
+  width: 22px; height: 2px;
+  background: #101767;
+  border-radius: 2px;
+  transition: .2s;
+}
+
+/* Mobile menu */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 72px; left: 0; right: 0; bottom: 0;
+  background: #fff;
+  z-index: 35;
+  padding: 24px;
+  overflow-y: auto;
+}
+.mobile-menu.open { display: flex; flex-direction: column; gap: 4px; }
+.mobile-menu a {
+  display: block;
+  padding: 14px 12px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #101767;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background .15s;
+}
+.mobile-menu a:hover { background: #f3f4f8; }
+.mobile-menu .btn-green { margin-top: 12px; justify-content: center; height: 48px; border-radius: 10px; }
+
+/* ── HERO ────────────────────────────────────────── */
+.hero {
+  padding-top: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 360px;
+  padding-bottom: 0;
+}
+.hero h1 {
+  text-align: center;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -.03em;
+  color: #101767;
+  max-width: 16ch;
+  margin: 0 auto;
+}
+.hero h1 em { font-style: normal; color: #6873B0; }
+
+/* Hero image band / slider */
+.hero-image-band { padding: 48px 0 64px; }
+.hero-image-wrap {
+  position: relative;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.hero-image-bg {
+  position: absolute;
+  left: 24px; right: 24px;
+  top: 50%; transform: translateY(-50%);
+  height: 300px;
+  background: #6873B0;
+  border-radius: 20px;
+}
+.hero-slider {
+  position: relative;
+  z-index: 1;
+  width: 70%;
+  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  aspect-ratio: 16/9;
+}
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity .8s ease;
+}
+.hero-slide.active { opacity: 1; }
+.hero-slide img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.slider-dots {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 5;
+}
+.slider-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.45);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background .3s;
+}
+.slider-dot.active { background: #fff; }
+.slider-arrow {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  z-index: 5;
+  background: rgba(255,255,255,.2);
+  border: none;
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background .2s;
+  color: #fff;
+}
+.slider-arrow:hover { background: rgba(255,255,255,.4); }
+.slider-arrow-prev { left: 16px; }
+.slider-arrow-next { right: 16px; }
+@media (max-width: 680px) {
+  .hero-slider { width: 90%; aspect-ratio: 4/3; }
+  .hero-image-bg { height: 180px; }
+}
+
+/* ── GREEN BORDER BOX ───────────────────────────── */
+.green-box-section { padding: 64px 0; overflow: hidden; }
+.green-box {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+  border: 2px solid #00AD60;
+  border-radius: 14px;
+  padding: 56px 80px;
+}
+.green-box-top::before {
+  content: '';
+  position: absolute;
+  left: -2px; top: -2px; right: -4px;
+  height: 52%;
+  background: #fff;
+  z-index: 2;
+}
+.green-box-bottom::before {
+  content: '';
+  position: absolute;
+  left: -2px; bottom: -2px; right: -4px;
+  height: 52%;
+  background: #fff;
+  z-index: 2;
+}
+.green-box p {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  font-size: clamp(1.3rem, 3.5vw, 2.5rem);
+  font-weight: 400;
+  line-height: 1.22;
+  color: #101767;
+}
+
+/* ── FEATURES 3-COL ─────────────────────────────── */
+.features-section { padding: 80px 0; }
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+  max-width: 1150px;
+  margin: 0 auto;
+}
+.feature-item { text-align: center; }
+.feature-icon {
+  width: 36px; height: 36px;
+  color: #2cc98b;
+  margin: 0 auto 20px;
+}
+.feature-icon svg { width: 36px; height: 36px; }
+.feature-item h3 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.1;
+  color: #101767;
+  margin-bottom: 14px;
+}
+.feature-item p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #101767;
+  max-width: 28ch;
+  margin: 0 auto;
+}
+
+/* ── NUMBERED LIST SECTION ──────────────────────── */
+.numbered-header {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 600;
+  line-height: 1;
+  color: #101767;
+  margin-bottom: 24px;
+}
+.numbered-header em { font-style: normal; color: #6873B0; }
+.numbered-list { border-top: 1px solid #e5e7ef; max-width: 760px; margin-top: 32px; }
+.numbered-list li {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 20px 0;
+  border-bottom: 1px solid #e5e7ef;
+  list-style: none;
+}
+.num-index {
+  flex-shrink: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #a9acc3;
+  width: 28px;
+}
+.num-text {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-weight: 400;
+  line-height: 1.2;
+  color: #101767;
+}
+
+/* ── TWO-COL WITH IMAGE ─────────────────────────── */
+.split-section { padding: 80px 0; overflow: hidden; }
+.split-inner {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+.split-content { flex: 0 0 62%; padding-right: 80px; }
+.split-image {
+  flex: 0 0 38%;
+  border-radius: 20px;
+  overflow: hidden;
+  min-height: 400px;
+  background: linear-gradient(135deg, #101767, #6873B0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.split-image svg { width: 100%; height: 100%; display: block; }
+
+/* ── SERVICES NUMBERED ──────────────────────────── */
+.services-list { border-top: 1px solid #e5e7ef; margin-top: 40px; }
+.service-row {
+  display: flex;
+  gap: 32px;
+  padding: 28px 0;
+  border-bottom: 1px solid #e5e7ef;
+  align-items: flex-start;
+}
+.service-row-num {
+  flex-shrink: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #a9acc3;
+  width: 28px;
+  padding-top: 3px;
+}
+.service-row-body h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #101767;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+.service-row-body p {
+  font-size: .95rem;
+  line-height: 1.5;
+  color: #5a5f8a;
+}
+
+/* ── GROUP BOX (logos/names) ────────────────────── */
+.group-box-section { padding: 80px 0; }
+.group-box-intro {
+  max-width: 640px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+.group-box-intro p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #5a5f8a;
+  margin-bottom: 28px;
+}
+.group-box {
+  position: relative;
+  border: 2px solid #00AD60;
+  border-radius: 14px;
+  padding: 40px 32px;
+}
+.group-box-inner {
+  position: absolute;
+  left: 5%; top: -2px;
+  width: 90%; height: calc(100% + 4px);
+  background: #fff;
+  z-index: 2;
+}
+.group-box-grid {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  text-align: center;
+}
+.group-box-grid span {
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  font-weight: 400;
+  color: #101767;
+  line-height: 1;
+  padding: 12px 0;
+}
+
+/* ── CTA SECTION ────────────────────────────────── */
+.cta-section { padding: 80px 0 100px; }
+.cta-inner { text-align: center; }
+.cta-inner h2 {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 600;
+  color: #101767;
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+.cta-inner p {
+  font-size: 1.05rem;
+  color: #5a5f8a;
+  max-width: 520px;
+  margin: 0 auto 36px;
+  line-height: 1.5;
+}
+
+/* ── CONTACT ────────────────────────────────────── */
+.contact-section { padding: 80px 0 100px; border-top: 1px solid #e5e7ef; }
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.contact-info h2 {
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 600;
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+.contact-info > p { font-size: 1rem; color: #5a5f8a; margin-bottom: 40px; line-height: 1.5; }
+.contact-items { display: flex; flex-direction: column; gap: 28px; }
+.contact-item { display: flex; gap: 16px; align-items: flex-start; }
+.contact-item-label {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #a9acc3;
+  margin-bottom: 4px;
+}
+.contact-item-val { font-size: 1rem; font-weight: 600; color: #101767; }
+.contact-item-val a { color: #101767; text-decoration: none; }
+.contact-item-val a:hover { color: #31b36f; }
+.contact-item-sub { font-size: .875rem; color: #757BBC; margin-top: 2px; }
+
+/* Contact form */
+.contact-form { background: #f3f4f8; border-radius: 16px; padding: 36px; }
+.contact-form h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 24px; color: #101767; }
+.form-group { margin-bottom: 14px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.form-group label {
+  display: block;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #a9acc3;
+  margin-bottom: 6px;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #e5e7ef;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: .9rem;
+  color: #101767;
+  background: #fff;
+  transition: border-color .15s;
+  outline: none;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus { border-color: #31b36f; }
+.form-group textarea { resize: vertical; min-height: 96px; }
+.form-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  background: #101767;
+  color: #fff;
+  border-radius: 10px;
+  font-size: .95rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .2s;
+}
+.form-btn:hover { background: #1a2580; }
+.form-note { font-size: .75rem; color: #a9acc3; margin-top: 12px; text-align: center; line-height: 1.4; }
+
+/* ── FOOTER ──────────────────────────────────────── */
+footer { border-top: 1px solid #e9e9e9; }
+.footer-inner {
+  padding: 40px 0 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+.footer-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e9e9e9;
+  width: 100%;
+  justify-content: center;
+}
+.footer-logo-mark {
+  width: 28px; height: 28px;
+  background: #101767;
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: .75rem; color: #fff;
+}
+.footer-logo-name { font-size: 1rem; font-weight: 700; color: #101767; }
+.footer-nav {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  list-style: none;
+  margin-bottom: 40px;
+  font-size: .95rem;
+  font-weight: 500;
+}
+.footer-nav a { color: #101767; text-decoration: none; transition: opacity .2s; }
+.footer-nav a:hover { opacity: .6; }
+.footer-meta {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  width: 100%;
+  align-items: center;
+  font-size: .9rem;
+  color: #101767;
+  padding-top: 24px;
+  border-top: 1px solid #e9e9e9;
+}
+.footer-meta-center { text-align: center; }
+.footer-meta-right { text-align: right; }
+.footer-group-bar {
+  background: #f3f4f8;
+  border-top: 1px solid #e9e9e9;
+  padding: 12px 0;
+  text-align: center;
+  font-size: .8rem;
+  color: #a9acc3;
+}
+.footer-group-bar a { color: #757BBC; text-decoration: none; }
+.footer-group-bar a:hover { color: #101767; }
+
+/* Section label (small uppercase above headings) */
+.section-label {
+  display: block;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #6873B0;
+  margin-bottom: 16px;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────── */
+@media (max-width: 1024px) {
+  .split-inner { flex-direction: column; }
+  .split-content { flex: none; width: 100%; padding-right: 0; padding-bottom: 40px; }
+  .split-image { flex: none; width: 100%; min-height: 260px; }
+  .green-box { padding: 48px 36px; }
+  .features-grid { gap: 32px; }
+}
+@media (max-width: 768px) {
+  .features-grid { grid-template-columns: 1fr; gap: 40px; }
+  .group-box-grid { grid-template-columns: 1fr 1fr; }
+  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+  .form-row { grid-template-columns: 1fr; }
+  .footer-meta { grid-template-columns: 1fr; gap: 8px; text-align: center !important; }
+  .footer-meta-right { text-align: center; }
+  .green-box { padding: 40px 24px; }
+  .green-box p { font-size: 1.2rem; }
+  .numbered-header { font-size: 2rem; }
+}
+@media (max-width: 680px) {
+  .nav-links, .nav-right .btn-green { display: none; }
+  .nav-toggle { display: flex; }
+  .hero h1 { font-size: 2.4rem; }
+  .hero-image-bg { height: 180px; }
+  .green-box { padding: 32px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ─────────────────────────────────────── -->
+<header id="site-header">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <div class="nav-logo-mark">
+          <!-- inline SVG wordmark -->
+          <svg width="108" height="24" viewBox="0 0 108 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <text x="0" y="18" font-family="Inter,sans-serif" font-weight="700" font-size="18" fill="#101767" letter-spacing="-0.5">fortis<tspan fill="#31b36f">.audit</tspan></text>
+          </svg>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#o-nas" data-i18n="nav-about">O nás</a></li>
+        <li><a href="#co-proverujeme" data-i18n="nav-services">Co prověřujeme</a></li>
+        <li><a href="#skupina" data-i18n="nav-group">fortis.group</a></li>
+        <li><a href="#kdy-se-obratit" data-i18n="nav-when">Kdy se obrátit</a></li>
+        <li><a href="#kontakt" data-i18n="nav-contact">Kontakt</a></li>
+      </ul>
+      <div class="nav-right">
+        <div class="lang-switch">
+          <button id="lang-cs" class="lang-btn active" onclick="setLang('cs')">CZ</button>
+          <span class="lang-sep">|</span>
+          <button id="lang-en" class="lang-btn" onclick="setLang('en')">EN</button>
+        </div>
+        <a href="#kontakt" class="btn-green" data-i18n="nav-cta">Napište nám</a>
+        <button class="nav-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#o-nas" onclick="closeMobileMenu()" data-i18n="nav-about">O nás</a>
+  <a href="#co-proverujeme" onclick="closeMobileMenu()" data-i18n="nav-services">Co prověřujeme</a>
+  <a href="#skupina" onclick="closeMobileMenu()" data-i18n="nav-group">fortis.group</a>
+  <a href="#kdy-se-obratit" onclick="closeMobileMenu()" data-i18n="nav-when">Kdy se obrátit</a>
+  <a href="#kontakt" onclick="closeMobileMenu()" data-i18n="nav-contact">Kontakt</a>
+  <a href="#kontakt" class="btn-green" onclick="closeMobileMenu()" data-i18n="nav-cta">Napište nám</a>
+</div>
+
+<main style="padding-top: 72px;">
+
+  <!-- ── HERO ────────────────────────────────────── -->
+  <section class="hero" style="padding: 72px 24px 0;">
+    <h1 data-i18n="hero-h1">Forenzní audity a <em>nezávislé prověřování</em>.</h1>
+  </section>
+
+  <!-- Hero visual band — abstract brand graphics (no stock photography) -->
+  <section class="hero-image-band">
+    <div class="hero-image-wrap">
+      <div class="hero-image-bg"></div>
+      <div class="hero-slider" id="hero-slider">
+        <div class="hero-slide active">
+          <img src="Fotografie/Hlavní/hero-1.jpg" alt="fortis.audit – prověřování dokumentace">
+        </div>
+        <div class="hero-slide">
+          <img src="Fotografie/Hlavní/hero-2.jpg" alt="fortis.audit – analýza finančních dat">
+        </div>
+        <div class="hero-slide">
+          <img src="Fotografie/Hlavní/hero-3.jpg" alt="fortis.audit – tým při forenzním šetření">
+        </div>
+        <button class="slider-arrow slider-arrow-prev" onclick="sliderMove(-1)" aria-label="Předchozí">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="slider-arrow slider-arrow-next" onclick="sliderMove(1)" aria-label="Další">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="slider-dots">
+          <button class="slider-dot active" onclick="sliderGo(0)"></button>
+          <button class="slider-dot" onclick="sliderGo(1)"></button>
+          <button class="slider-dot" onclick="sliderGo(2)"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── O NÁS – green box top ─────────────────────── -->
+  <section class="green-box-section" id="o-nas">
+    <div class="container">
+      <div class="green-box green-box-top">
+        <p data-i18n="green-box-1">Pomáháme vlastníkům, vedení společností a dozorčím orgánům objasnit citlivé situace. Od prověření finančních nesrovnalostí přes interní šetření až po posouzení kontrolních mechanismů.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FEATURES – 3 sloupce: Naše přednosti ─────── -->
+  <section class="features-section">
+    <div class="container">
+      <div class="features-grid">
+        <article class="feature-item">
+          <div class="feature-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 4.5v15m0-15c-2.5 0-4.5 1.2-6 3m6-3c2.5 0 4.5 1.2 6 3M4.5 10.5c1.9-1.7 4.6-2.7 7.5-2.7s5.6 1 7.5 2.7M4.5 10.5v6c1.9 1.7 4.6 2.7 7.5 2.7s5.6-1 7.5-2.7v-6"/>
+            </svg>
+          </div>
+          <h3 data-i18n="feat-1-h">Odborná hloubka</h3>
+          <p data-i18n="feat-1-p">Fortis.audit staví na zkušeném řešitelském týmu s odborností v oblasti financí, účetnictví, forenzního prověřování a firemních procesů.</p>
+        </article>
+        <article class="feature-item">
+          <div class="feature-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <h3 data-i18n="feat-2-h">Nezávislý úsudek</h3>
+          <p data-i18n="feat-2-p">Posuzujeme situaci bez vazby na vedení společnosti i bez osobního zájmu na výsledku. Závěry opíráme výhradně o doložená fakta.</p>
+        </article>
+        <article class="feature-item">
+          <div class="feature-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/>
+              <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+            </svg>
+          </div>
+          <h3 data-i18n="feat-3-h">Diskrétnost</h3>
+          <p data-i18n="feat-3-p">Citlivé informace zůstávají v úzkém okruhu zainteresovaných osob. Postup šetření přizpůsobujeme potřebě důvěrnosti každého případu.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CO PROVĚŘUJEME ────────────────────────────── -->
+  <section class="split-section" id="co-proverujeme">
+    <div class="container">
+      <div class="split-inner">
+        <div class="split-content">
+          <span class="section-label" data-i18n="label-services">Co prověřujeme</span>
+          <h2 class="numbered-header" data-i18n="services-h">Oblasti,<br><em>které prověřujeme</em></h2>
+          <p data-i18n="services-p" style="font-size:1rem;color:#5a5f8a;line-height:1.6;max-width:50ch;">Finanční a účetní analýzu doplňujeme odborností v oblasti IT a práce s daty. Prověřujeme vazby mezi transakcemi, dokumentací a záznamy v informačních systémech.</p>
+          <div class="services-list">
+            <div class="service-row">
+              <div class="service-row-num">01</div>
+              <div class="service-row-body">
+                <h3 data-i18n="svc-1-h">Forenzní audity &amp; interní šetření</h3>
+                <p data-i18n="svc-1-p">Prověřujeme podezření na podvodné jednání, zneužití firemních prostředků nebo obcházení interních pravidel. Rekonstruujeme průběh událostí a vyhodnocujeme související finanční operace.</p>
+              </div>
+            </div>
+            <div class="service-row">
+              <div class="service-row-num">02</div>
+              <div class="service-row-body">
+                <h3 data-i18n="svc-2-h">Finanční toky &amp; obchodní vztahy</h3>
+                <p data-i18n="svc-2-p">Analyzujeme nestandardní transakce, dodavatelské vztahy a možné střety zájmů. Zkoumáme ekonomický smysl operací, doložení plnění a vazby mezi zúčastněnými subjekty.</p>
+              </div>
+            </div>
+            <div class="service-row">
+              <div class="service-row-num">03</div>
+              <div class="service-row-body">
+                <h3 data-i18n="svc-3-h">Data &amp; informační systémy</h3>
+                <p data-i18n="svc-3-p">Propojujeme analýzu firemních dat s finančním prověřováním. Hledáme nesrovnalosti, opakující se vzorce a souvislosti, které při běžné kontrole jednotlivých dokladů nemusí být patrné.</p>
+              </div>
+            </div>
+            <div class="service-row">
+              <div class="service-row-num">04</div>
+              <div class="service-row-body">
+                <h3 data-i18n="svc-4-h">Vnitřní kontroly &amp; prevence</h3>
+                <p data-i18n="svc-4-p">Identifikujeme slabá místa v procesech a kontrolních mechanismech. Navrhujeme opatření, která pomáhají omezit riziko opakování a posílit kontrolu nad hospodařením společnosti.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="split-image">
+          <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Grafika – analýza dat a dokumentů">
+            <defs>
+              <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#101767"/>
+                <stop offset="1" stop-color="#6873B0"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="500" fill="url(#g4)"/>
+            <g stroke="rgba(255,255,255,.3)" stroke-width="1.5">
+              <line x1="80" y1="120" x2="80" y2="420"/>
+              <line x1="150" y1="120" x2="150" y2="420"/>
+              <line x1="220" y1="120" x2="220" y2="420"/>
+              <line x1="290" y1="120" x2="290" y2="420"/>
+              <line x1="80" y1="150" x2="290" y2="150"/>
+              <line x1="80" y1="220" x2="290" y2="220"/>
+              <line x1="80" y1="290" x2="290" y2="290"/>
+              <line x1="80" y1="360" x2="290" y2="360"/>
+            </g>
+            <rect x="150" y="150" width="70" height="70" fill="rgba(44,201,139,.35)"/>
+            <rect x="220" y="290" width="70" height="70" fill="rgba(44,201,139,.35)"/>
+            <circle cx="255" cy="325" r="58" fill="none" stroke="#fff" stroke-width="4"/>
+            <line x1="296" y1="366" x2="340" y2="410" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Druhý green-box (citát) ───────────────────── -->
+  <section class="green-box-section">
+    <div class="container">
+      <div class="green-box green-box-bottom">
+        <p data-i18n="green-box-2">V situacích, které mohou zasáhnout hodnotu společnosti, její fungování i důvěru v její vedení, poskytujeme nezávislý úsudek a srozumitelné závěry. Pracujeme diskrétně, důsledně a s respektem k odpovědnosti těch, kteří podle našich zjištění rozhodují.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ZÁZEMÍ FORTIS.GROUP ───────────────────────── -->
+  <section class="group-box-section" id="skupina">
+    <div class="container-wide">
+      <h2 data-i18n="group-h" style="text-align:center;font-size:clamp(2rem,5vw,3.5rem);font-weight:600;line-height:1.08;color:#101767;margin-bottom:24px;">
+        Součást skupiny<br><span style="color:#6873B0;">fortis.group</span>
+      </h2>
+      <div class="group-box-intro">
+        <p data-i18n="group-p">Jsme součástí nezávislé poradenské skupiny fortis.group, která spojuje finanční, transakční a auditní expertizu. Naše specializace má zázemí širšího týmu — podle potřeb konkrétního případu propojujeme související odbornosti s důrazem na nezávislost, důvěrnost a jednotné porozumění situaci.</p>
+        <a href="https://fortisgroup.cz/" target="_blank" rel="noopener" class="btn-green" data-i18n="group-btn">Poznat fortis.group</a>
+      </div>
+      <div class="group-box">
+        <div class="group-box-inner"></div>
+        <div class="group-box-grid">
+          <span>#lexfortispartners</span>
+          <span>#lexfortisacc</span>
+          <span>#lexliq</span>
+          <span>#fortistrust</span>
+          <span>#fortisadvisory</span>
+          <span style="font-weight:700;color:#31b36f;">#fortisaudit</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── KDY SE NA NÁS OBRÁTIT ──────────────────────── -->
+  <section class="split-section" id="kdy-se-obratit">
+    <div class="container">
+      <div class="split-inner" style="flex-direction: row-reverse;">
+        <div class="split-content" style="padding-right: 0; padding-left: 80px;">
+          <span class="section-label" data-i18n="label-when">Kdy se obrátit</span>
+          <h2 class="numbered-header" data-i18n="when-h">Kdy se na nás<br><em style="font-style:normal;color:#6873B0">obrátit?</em></h2>
+          <p data-i18n="when-p" style="font-size:1rem;color:#5a5f8a;line-height:1.6;margin-bottom:8px;">Obraťte se na nás, pokud řešíte některou z následujících situací:</p>
+          <ul class="numbered-list">
+            <li>
+              <span class="num-index">01</span>
+              <span class="num-text" data-i18n="when-1">Podezření na podvod nebo zneužití prostředků</span>
+            </li>
+            <li>
+              <span class="num-index">02</span>
+              <span class="num-text" data-i18n="when-2">Nejasné transakce a finanční nesrovnalosti</span>
+            </li>
+            <li>
+              <span class="num-index">03</span>
+              <span class="num-text" data-i18n="when-3">Pochybnosti o dodavatelských vztazích</span>
+            </li>
+            <li>
+              <span class="num-index">04</span>
+              <span class="num-text" data-i18n="when-4">Možné střety zájmů</span>
+            </li>
+            <li>
+              <span class="num-index">05</span>
+              <span class="num-text" data-i18n="when-5">Potřeba nezávislého interního šetření</span>
+            </li>
+            <li>
+              <span class="num-index">06</span>
+              <span class="num-text" data-i18n="when-6">Prověření účinnosti vnitřních kontrol</span>
+            </li>
+          </ul>
+        </div>
+        <div class="split-image" style="flex: 0 0 38%;">
+          <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Grafika – nezávislé prověřování a kontrola">
+            <defs>
+              <linearGradient id="g5" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#101767"/>
+                <stop offset="1" stop-color="#6873B0"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="500" fill="url(#g5)"/>
+            <g fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.5">
+              <circle cx="200" cy="250" r="140"/>
+              <circle cx="200" cy="250" r="100"/>
+              <circle cx="200" cy="250" r="60"/>
+            </g>
+            <path d="M200 160 L256 186 V246 C256 296 230 326 200 340 C170 326 144 296 144 246 V186 Z" fill="#fff"/>
+            <path d="M176 248 L194 266 L228 224" fill="none" stroke="#101767" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ───────────────────────────────────────── -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-inner">
+        <h2 data-i18n="cta-h">Prostor pro<br>důvěrný rozhovor</h2>
+        <p data-i18n="cta-p">Popište nám stručně svou situaci. Domluvíme diskrétní úvodní konzultaci a vhodný postup prověření.</p>
+        <a href="#kontakt" class="btn-green" data-i18n="cta-btn" style="height:52px;padding:0 36px;font-size:1rem;">Napište nám</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── KONTAKT ───────────────────────────────────── -->
+  <section class="contact-section" id="kontakt">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <span class="section-label" data-i18n="label-contact">Kontakt</span>
+          <h2 data-i18n="contact-h">Spojte se<br>s námi</h2>
+          <p data-i18n="contact-p">Ozvěte se nám e-mailem nebo přes formulář níže — ozveme se zpět a domluvíme další postup.</p>
+          <div class="contact-items">
+            <div class="contact-item">
+              <div>
+                <div class="contact-item-label" data-i18n="contact-email-label">E-mail</div>
+                <div class="contact-item-val"><a href="mailto:info@fortisaudit.cz">info@fortisaudit.cz</a></div>
+              </div>
+            </div>
+            <!-- TODO: doplnit Adresa a Společnost (IČO/DIČ), jakmile budou k dispozici reálné údaje -->
+          </div>
+        </div>
+        <div class="contact-form">
+          <h3 data-i18n="form-h">Nezávazná konzultace</h3>
+          <form id="contact-form" action="/api/contact" method="POST" novalidate>
+            <input type="hidden" name="_subject" data-i18n-val="form-subject" value="Nová poptávka – fortis.audit">
+            <input type="hidden" name="_language" value="cs">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="f-name" data-i18n="f-name-label">Jméno</label>
+                <input id="f-name" type="text" name="jmeno" placeholder="Jan Novák" data-i18n-ph="f-name-ph" required>
+              </div>
+              <div class="form-group">
+                <label for="f-email" data-i18n="f-email-label">E-mail</label>
+                <input id="f-email" type="email" name="email" placeholder="jan@firma.cz" data-i18n-ph="f-email-ph" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="f-company" data-i18n="f-company-label">Společnost</label>
+              <input id="f-company" type="text" name="spolecnost" placeholder="Název společnosti" data-i18n-ph="f-company-ph">
+            </div>
+            <div class="form-group">
+              <label for="f-type" data-i18n="f-type-label">Typ poptávky</label>
+              <select id="f-type" name="typ_poptavky">
+                <option value="" data-i18n="f-opt-0">Vyberte…</option>
+                <option data-i18n="f-opt-1">Forenzní audit &amp; interní šetření</option>
+                <option data-i18n="f-opt-2">Finanční toky &amp; obchodní vztahy</option>
+                <option data-i18n="f-opt-3">Data &amp; informační systémy</option>
+                <option data-i18n="f-opt-4">Vnitřní kontroly &amp; prevence</option>
+                <option data-i18n="f-opt-5">Konzultace – jiné</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="f-message" data-i18n="f-msg-label">Zpráva</label>
+              <textarea id="f-message" name="zprava" placeholder="Stručně popište svou situaci…" data-i18n-ph="f-msg-ph"></textarea>
+            </div>
+            <button type="submit" class="form-btn" id="form-btn" data-i18n="f-btn">Odeslat poptávku</button>
+            <p class="form-note" id="form-note" data-i18n="f-note">Vaše údaje jsou zpracovány v souladu s GDPR. Odpovíme do 24 hodin v pracovní dny.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── FOOTER ─────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <a href="#" class="footer-logo">
+        <div class="footer-logo-mark">fa</div>
+        <span class="footer-logo-name">fortis.audit</span>
+      </a>
+      <ul class="footer-nav">
+        <li><a href="#o-nas" data-i18n="nav-about">O nás</a></li>
+        <li><a href="#co-proverujeme" data-i18n="nav-services">Co prověřujeme</a></li>
+        <li><a href="#skupina" data-i18n="nav-group">fortis.group</a></li>
+        <li><a href="#kdy-se-obratit" data-i18n="nav-when">Kdy se obrátit</a></li>
+        <li><a href="#kontakt" data-i18n="nav-contact">Kontakt</a></li>
+      </ul>
+      <div class="footer-meta">
+        <span>© fortis.audit 2026</span>
+        <span class="footer-meta-center"><strong>E-mail:</strong> info@fortisaudit.cz</span>
+        <span class="footer-meta-right">All Rights Reserved</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-group-bar">
+    <div class="container">
+      <span data-i18n="footer-member">Člen skupiny</span> <a href="https://fortisgroup.cz" target="_blank" rel="noopener">fortis.group</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── SLIDER ────────────────────────────────────────
+let sliderCurrent = 0;
+const sliderTotal = 3;
+let sliderTimer;
+
+function sliderGo(idx){
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots   = document.querySelectorAll('.slider-dot');
+  slides[sliderCurrent].classList.remove('active');
+  dots[sliderCurrent].classList.remove('active');
+  sliderCurrent = (idx + sliderTotal) % sliderTotal;
+  slides[sliderCurrent].classList.add('active');
+  dots[sliderCurrent].classList.add('active');
+  resetSliderTimer();
+}
+
+function sliderMove(dir){ sliderGo(sliderCurrent + dir); }
+
+function resetSliderTimer(){
+  clearInterval(sliderTimer);
+  sliderTimer = setInterval(() => sliderMove(1), 5000);
+}
+
+resetSliderTimer();
+
+// Mobile menu
+function toggleMobileMenu(){
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+function closeMobileMenu(){
+  document.getElementById('mobile-menu').classList.remove('open');
+}
+document.addEventListener('click', function(e){
+  const menu = document.getElementById('mobile-menu');
+  if(menu.classList.contains('open') && !menu.contains(e.target) && !e.target.closest('.nav-toggle')){
+    menu.classList.remove('open');
+  }
+});
+
+// Smooth scroll with offset
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', function(e){
+    const id = this.getAttribute('href');
+    if(id === '#') return;
+    const target = document.querySelector(id);
+    if(target){
+      e.preventDefault();
+      window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 84, behavior: 'smooth' });
+      closeMobileMenu();
+    }
+  });
+});
+
+// ── I18N ─────────────────────────────────────────────
+const T = {
+  cs: {
+    'nav-about':'O nás','nav-services':'Co prověřujeme','nav-group':'fortis.group',
+    'nav-when':'Kdy se obrátit','nav-contact':'Kontakt','nav-cta':'Napište nám',
+    'hero-h1':'Forenzní audity a <em>nezávislé prověřování</em>.',
+    'green-box-1':'Pomáháme vlastníkům, vedení společností a dozorčím orgánům objasnit citlivé situace. Od prověření finančních nesrovnalostí přes interní šetření až po posouzení kontrolních mechanismů.',
+    'feat-1-h':'Odborná hloubka',
+    'feat-1-p':'Fortis.audit staví na zkušeném řešitelském týmu s odborností v oblasti financí, účetnictví, forenzního prověřování a firemních procesů.',
+    'feat-2-h':'Nezávislý úsudek',
+    'feat-2-p':'Posuzujeme situaci bez vazby na vedení společnosti i bez osobního zájmu na výsledku. Závěry opíráme výhradně o doložená fakta.',
+    'feat-3-h':'Diskrétnost',
+    'feat-3-p':'Citlivé informace zůstávají v úzkém okruhu zainteresovaných osob. Postup šetření přizpůsobujeme potřebě důvěrnosti každého případu.',
+    'label-services':'Co prověřujeme',
+    'services-h':'Oblasti,<br><em style="font-style:normal;color:#6873B0">které prověřujeme</em>',
+    'services-p':'Finanční a účetní analýzu doplňujeme odborností v oblasti IT a práce s daty. Prověřujeme vazby mezi transakcemi, dokumentací a záznamy v informačních systémech.',
+    'svc-1-h':'Forenzní audity &amp; interní šetření',
+    'svc-1-p':'Prověřujeme podezření na podvodné jednání, zneužití firemních prostředků nebo obcházení interních pravidel. Rekonstruujeme průběh událostí a vyhodnocujeme související finanční operace.',
+    'svc-2-h':'Finanční toky &amp; obchodní vztahy',
+    'svc-2-p':'Analyzujeme nestandardní transakce, dodavatelské vztahy a možné střety zájmů. Zkoumáme ekonomický smysl operací, doložení plnění a vazby mezi zúčastněnými subjekty.',
+    'svc-3-h':'Data &amp; informační systémy',
+    'svc-3-p':'Propojujeme analýzu firemních dat s finančním prověřováním. Hledáme nesrovnalosti, opakující se vzorce a souvislosti, které při běžné kontrole jednotlivých dokladů nemusí být patrné.',
+    'svc-4-h':'Vnitřní kontroly &amp; prevence',
+    'svc-4-p':'Identifikujeme slabá místa v procesech a kontrolních mechanismech. Navrhujeme opatření, která pomáhají omezit riziko opakování a posílit kontrolu nad hospodařením společnosti.',
+    'green-box-2':'V situacích, které mohou zasáhnout hodnotu společnosti, její fungování i důvěru v její vedení, poskytujeme nezávislý úsudek a srozumitelné závěry. Pracujeme diskrétně, důsledně a s respektem k odpovědnosti těch, kteří podle našich zjištění rozhodují.',
+    'group-h':'Součást skupiny<br><span style="color:#6873B0;">fortis.group</span>',
+    'group-p':'Jsme součástí nezávislé poradenské skupiny fortis.group, která spojuje finanční, transakční a auditní expertizu. Naše specializace má zázemí širšího týmu — podle potřeb konkrétního případu propojujeme související odbornosti s důrazem na nezávislost, důvěrnost a jednotné porozumění situaci.',
+    'group-btn':'Poznat fortis.group',
+    'label-when':'Kdy se obrátit',
+    'when-h':'Kdy se na nás<br><em style="font-style:normal;color:#6873B0">obrátit?</em>',
+    'when-p':'Obraťte se na nás, pokud řešíte některou z následujících situací:',
+    'when-1':'Podezření na podvod nebo zneužití prostředků',
+    'when-2':'Nejasné transakce a finanční nesrovnalosti',
+    'when-3':'Pochybnosti o dodavatelských vztazích',
+    'when-4':'Možné střety zájmů',
+    'when-5':'Potřeba nezávislého interního šetření',
+    'when-6':'Prověření účinnosti vnitřních kontrol',
+    'cta-h':'Prostor pro<br>důvěrný rozhovor',
+    'cta-p':'Popište nám stručně svou situaci. Domluvíme diskrétní úvodní konzultaci a vhodný postup prověření.',
+    'cta-btn':'Napište nám',
+    'label-contact':'Kontakt','contact-h':'Spojte se<br>s námi',
+    'contact-p':'Ozvěte se nám e-mailem nebo přes formulář níže — ozveme se zpět a domluvíme další postup.',
+    'contact-email-label':'E-mail',
+    'form-h':'Nezávazná konzultace','form-subject':'Nová poptávka – fortis.audit',
+    'f-name-label':'Jméno','f-name-ph':'Jan Novák',
+    'f-email-label':'E-mail','f-email-ph':'jan@firma.cz',
+    'f-company-label':'Společnost','f-company-ph':'Název společnosti',
+    'f-type-label':'Typ poptávky',
+    'f-opt-0':'Vyberte…','f-opt-1':'Forenzní audit &amp; interní šetření',
+    'f-opt-2':'Finanční toky &amp; obchodní vztahy','f-opt-3':'Data &amp; informační systémy',
+    'f-opt-4':'Vnitřní kontroly &amp; prevence','f-opt-5':'Konzultace – jiné',
+    'f-msg-label':'Zpráva','f-msg-ph':'Stručně popište svou situaci…',
+    'f-btn':'Odeslat poptávku',
+    'f-note':'Vaše údaje jsou zpracovány v souladu s GDPR. Odpovíme do 24 hodin v pracovní dny.',
+    'footer-member':'Člen skupiny',
+    'form-sending':'Odesílám…','form-sent':'Odesláno ✓',
+    'form-err':'Nepodařilo se odeslat formulář. Zkuste to znovu nebo napište na info@fortisaudit.cz.',
+    'form-required':'Vyplňte prosím jméno a e-mail.',
+  },
+  en: {
+    'nav-about':'About','nav-services':'What we investigate','nav-group':'fortis.group',
+    'nav-when':'When to reach out','nav-contact':'Contact','nav-cta':'Write to us',
+    'hero-h1':'Forensic audits and <em>independent investigations</em>.',
+    'green-box-1':'We help owners, company management and supervisory bodies clarify sensitive situations — from investigating financial discrepancies and internal inquiries to assessing control mechanisms.',
+    'feat-1-h':'Expert depth',
+    'feat-1-p':'Fortis.audit draws on an experienced team with expertise in finance, accounting, forensic investigation and corporate processes.',
+    'feat-2-h':'Independent judgement',
+    'feat-2-p':'We assess every situation without ties to company management and without personal interest in the outcome. Our conclusions rest solely on documented facts.',
+    'feat-3-h':'Discretion',
+    'feat-3-p':'Sensitive information stays within a narrow circle of those involved. We tailor our investigative approach to the confidentiality each case requires.',
+    'label-services':'What we investigate',
+    'services-h':'Areas<br><em style="font-style:normal;color:#6873B0">we investigate</em>',
+    'services-p':'We complement financial and accounting analysis with expertise in IT and data. We examine the links between transactions, documentation and records in information systems.',
+    'svc-1-h':'Forensic audits &amp; internal investigations',
+    'svc-1-p':'We investigate suspected fraud, misuse of company resources or circumvention of internal rules. We reconstruct the course of events and evaluate the related financial operations.',
+    'svc-2-h':'Financial flows &amp; business relationships',
+    'svc-2-p':'We analyse non-standard transactions, supplier relationships and possible conflicts of interest. We examine the economic rationale of operations, evidence of performance and the links between the parties involved.',
+    'svc-3-h':'Data &amp; information systems',
+    'svc-3-p':'We connect company data analysis with financial investigation, looking for discrepancies, recurring patterns and links that may not be apparent from a routine review of individual documents.',
+    'svc-4-h':'Internal controls &amp; prevention',
+    'svc-4-p':'We identify weaknesses in processes and control mechanisms, and propose measures that help limit the risk of recurrence and strengthen control over the company\'s finances.',
+    'green-box-2':'In situations that can affect a company\'s value, its operation and trust in its management, we provide independent judgement and clear conclusions. We work discreetly, rigorously and with respect for the responsibility of those who make decisions based on our findings.',
+    'group-h':'Part of the<br><span style="color:#6873B0;">fortis.group</span>',
+    'group-p':'We are part of the independent advisory group fortis.group, which brings together financial, transactional and audit expertise. Our specialisation is backed by a wider team — depending on the needs of each case, we connect related expertise with an emphasis on independence, confidentiality and a shared understanding of the situation.',
+    'group-btn':'Discover fortis.group',
+    'label-when':'When to reach out',
+    'when-h':'When should<br><em style="font-style:normal;color:#6873B0">you contact us?</em>',
+    'when-p':'Get in touch if you are facing any of the following situations:',
+    'when-1':'Suspected fraud or misuse of funds',
+    'when-2':'Unclear transactions and financial discrepancies',
+    'when-3':'Doubts about supplier relationships',
+    'when-4':'Possible conflicts of interest',
+    'when-5':'Need for an independent internal investigation',
+    'when-6':'Review of the effectiveness of internal controls',
+    'cta-h':'Space for a<br>confidential conversation',
+    'cta-p':'Briefly describe your situation. We will arrange a discreet initial consultation and the appropriate course of investigation.',
+    'cta-btn':'Write to us',
+    'label-contact':'Contact','contact-h':'Get in<br>touch',
+    'contact-p':'Reach out by email or using the form below — we\'ll get back to you to discuss the next steps.',
+    'contact-email-label':'E-mail',
+    'form-h':'Non-binding consultation','form-subject':'New enquiry – fortis.audit',
+    'f-name-label':'Name','f-name-ph':'John Smith',
+    'f-email-label':'E-mail','f-email-ph':'john@company.com',
+    'f-company-label':'Company','f-company-ph':'Company name',
+    'f-type-label':'Type of enquiry',
+    'f-opt-0':'Select…','f-opt-1':'Forensic audit &amp; internal investigation',
+    'f-opt-2':'Financial flows &amp; business relationships','f-opt-3':'Data &amp; information systems',
+    'f-opt-4':'Internal controls &amp; prevention','f-opt-5':'Consultation – other',
+    'f-msg-label':'Message','f-msg-ph':'Briefly describe your situation…',
+    'f-btn':'Send enquiry',
+    'f-note':'Your data is processed in accordance with GDPR. We will respond within 24 hours on business days.',
+    'footer-member':'Member of',
+    'form-sending':'Sending…','form-sent':'Sent ✓',
+    'form-err':'Failed to send the form. Please try again or email info@fortisaudit.cz.',
+    'form-required':'Please fill in your name and email.',
+  }
+};
+
+let currentLang = localStorage.getItem('fortisaudit_lang') || 'cs';
+
+function setLang(lang) {
+  const t = T[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const v = t[el.dataset.i18n];
+    if(v !== undefined) el.innerHTML = v;
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const v = t[el.dataset.i18nPh];
+    if(v !== undefined) el.placeholder = v;
+  });
+  document.querySelectorAll('[data-i18n-val]').forEach(el => {
+    const v = t[el.dataset.i18nVal];
+    if(v !== undefined) el.value = v;
+  });
+  document.documentElement.lang = lang;
+  const titles = {
+    cs: 'fortis.audit – Forenzní audity a nezávislé prověřování',
+    en: 'fortis.audit – Forensic Audits and Independent Investigations',
+  };
+  document.title = titles[lang] || titles.cs;
+  document.getElementById('lang-cs').classList.toggle('active', lang === 'cs');
+  document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+  currentLang = lang;
+  localStorage.setItem('fortisaudit_lang', lang);
+}
+
+setLang(currentLang);
+
+// Contact form
+const contactForm = document.getElementById('contact-form');
+const formBtn     = document.getElementById('form-btn');
+const formNote    = document.getElementById('form-note');
+
+contactForm.addEventListener('submit', async function(e){
+  e.preventDefault();
+
+  const t = T[currentLang];
+  const email = contactForm.querySelector('[name="email"]');
+  const jmeno = contactForm.querySelector('[name="jmeno"]');
+  if(!jmeno.value.trim() || !email.value.trim()){
+    formNote.textContent = t['form-required'];
+    formNote.style.color = '#e05';
+    return;
+  }
+
+  formBtn.textContent = t['form-sending'];
+  formBtn.disabled = true;
+
+  try {
+    const data = Object.fromEntries(new FormData(contactForm));
+    const resp = await fetch(contactForm.action, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+    });
+
+    if(resp.ok){
+      formBtn.textContent = t['form-sent'];
+      formBtn.style.background = '#31b36f';
+      formNote.textContent = t['f-note'];
+      formNote.style.color = '#31b36f';
+      contactForm.reset();
+    } else {
+      const data = await resp.json().catch(()=>({}));
+      throw new Error(data?.error || resp.status);
+    }
+  } catch(err){
+    formBtn.textContent = t['f-btn'];
+    formBtn.disabled = false;
+    formBtn.style.background = '';
+    formNote.textContent = err.message || t['form-err'];
+    formNote.style.color = '#e05';
+  }
+});
+
+// Scroll reveal
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.feature-item, .service-row, .num-text').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(16px)';
+  el.style.transition = 'opacity .5s ease, transform .5s ease';
+  revealObserver.observe(el);
+});
+</script>
+</body>
+</html>
