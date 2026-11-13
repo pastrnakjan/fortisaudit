@@ -5,7 +5,7 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: false,
   auth: {
-    user: 'info@fortisaudit.cz',
+    user: 'office@fortisgroup.cz',
     pass: process.env.SMTP_PASS,
   },
 });
@@ -23,8 +23,8 @@ module.exports = async function handler(req, res) {
 
   try {
     await transporter.sendMail({
-      from: '"fortis.audit web" <info@fortisaudit.cz>',
-      to: 'info@fortisaudit.cz',
+      from: '"fortis.audit web" <office@fortisgroup.cz>',
+      to: 'office@fortisgroup.cz',
       replyTo: email,
       subject: `Nová poptávka – ${jmeno}`,
       text: [
