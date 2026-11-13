@@ -1,3 +1,5 @@
 .DS_Store
 Fotografie/Hlavní/Originály/
 Fotografie/Originály/
+.vercel
+.env*
